@@ -1,0 +1,42 @@
+body {
+  background-color: #282c34;
+  color: white;
+  font-family: sans-serif;
+}
+.App {
+  text-align: center;
+}
+.App-header {
+  padding: 20px;
+}
+.controls {
+  margin-bottom: 20px;
+  font-size: 1.2em;
+}
+.controls label {
+  margin-right: 10px;
+}
+.controls select {
+  padding: 5px;
+  font-size: 1em;
+}
+.error-message {
+  color: #ff6b6b;
+  margin: 10px;
+}
+.flights-table {
+  margin: 20px auto;
+  border-collapse: collapse;
+  width: 80%;
+  max-width: 1000px;
+}
+.flights-table th, .flights-table td {
+  border: 1px solid #444;
+  padding: 12px;
+}
+.flights-table th {
+  background-color: #20232a;
+}
+.flights-table tbody tr:nth-child(odd) {
+  background-color: #333842;
+}
