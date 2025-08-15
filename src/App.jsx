@@ -7,6 +7,7 @@ function App() {
     const [flights, setFlights] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+
     const formatTime = (isoString) => {
         return new Date(isoString).toLocaleTimeString([], {
             hour: '2-digit',
@@ -15,7 +16,6 @@ function App() {
         });
     };
 
-    // 1. Fetch all airports when the component first loads
     useEffect(() => {
         fetch('http://Flight-api-app1-env.eba-5t8pa5i9.us-east-2.elasticbeanstalk.com/api/airports')
             .then(response => response.json())
@@ -28,7 +28,6 @@ function App() {
             .catch(err => setError('Could not fetch airports. Is the backend running?'));
     }, []);
 
-    // 2. Fetch flights whenever the selectedAirportId changes
     useEffect(() => {
         if (!selectedAirportId) {
             setFlights([]);
@@ -56,8 +55,11 @@ function App() {
 
     return (
         <div className="App">
-            <header className="App-header">
-                <h1>Flight Departures</h1>
+            <div className="app-header-container">
+                <h1>✈️ Flight Tracker</h1>
+            </div>
+            <main className="App-body">
+                <h2>Departures Board</h2>
                 <div className="controls">
                     <label htmlFor="airport-select">Select Airport:</label>
                     <select id="airport-select" value={selectedAirportId} onChange={handleAirportChange}>
@@ -72,7 +74,7 @@ function App() {
                 {error && <div className="error-message">{error}</div>}
                 {loading && <div className="spinner"></div>}
 
-                <table className="flights-table">
+                {!loading && <table className="flights-table">
                     <thead>
                     <tr>
                         <th>Flight #</th>
@@ -95,19 +97,19 @@ function App() {
                                 <td className={`status-${flight.status.toLowerCase().replace(' ', '-')}`}>
                                     {flight.status}
                                 </td>
-
                             </tr>
                         ))
                     ) : (
-                        !loading && (
-                            <tr>
-                                <td colSpan="6">No departures found for this airport.</td>
-                            </tr>
-                        )
+                        <tr>
+                            <td colSpan="6">No departures found for this airport.</td>
+                        </tr>
                     )}
                     </tbody>
-                </table>
-            </header>
+                </table>}
+            </main>
+            <footer className="app-footer">
+                <p>&copy; 2025 Flight Tracker by PRINCESS. All rights reserved.</p>
+            </footer>
         </div>
     )
 }
