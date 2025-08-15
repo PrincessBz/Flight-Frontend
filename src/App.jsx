@@ -7,10 +7,17 @@ function App() {
     const [flights, setFlights] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const formatTime = (isoString) => {
+        return new Date(isoString).toLocaleTimeString([], {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: true
+        });
+    };
 
     // 1. Fetch all airports when the component first loads
     useEffect(() => {
-        fetch('http://localhost:8080/api/airports')
+        fetch('http://Flight-api-app1-env.eba-5t8pa5i9.us-east-2.elasticbeanstalk.com/api/airports')
             .then(response => response.json())
             .then(data => {
                 setAirports(data);
@@ -30,7 +37,7 @@ function App() {
         setLoading(true);
         setError(null);
         setFlights([]);
-        fetch(`http://localhost:8080/api/flights/departures?airportId=${selectedAirportId}`)
+        fetch(`http://Flight-api-app1-env.eba-5t8pa5i9.us-east-2.elasticbeanstalk.com/api/flights/departures?airportId=${selectedAirportId}`)
             .then(response => response.ok ? response.json() : Promise.reject('Network response was not ok'))
             .then(data => {
                 setFlights(data);
@@ -63,7 +70,7 @@ function App() {
                 </div>
 
                 {error && <div className="error-message">{error}</div>}
-                {loading && <div>Loading flights...</div>}
+                {loading && <div className="spinner"></div>}
 
                 <table className="flights-table">
                     <thead>
@@ -83,9 +90,12 @@ function App() {
                                 <td>{flight.flightNumber}</td>
                                 <td>{flight.airlineName}</td>
                                 <td>{flight.destinationAirport.code}</td>
-                                <td>{new Date(flight.departureTime).toLocaleTimeString()}</td>
+                                <td>{formatTime(flight.departureTime)}</td>
                                 <td>{flight.gateNumber}</td>
-                                <td>{flight.status}</td>
+                                <td className={`status-${flight.status.toLowerCase().replace(' ', '-')}`}>
+                                    {flight.status}
+                                </td>
+
                             </tr>
                         ))
                     ) : (
